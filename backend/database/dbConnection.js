@@ -2,7 +2,7 @@ import mongoose from 'mongoose'
 
 const dbConnection = ()=>{
     mongoose.connect(process.env.MONGO_URI , {
-        dbName : "PORTFOLIO"
+        dbName : "portfolio"
     }).then(() => {
         console.log("connected to database.")
     }).catch((error)=>{
