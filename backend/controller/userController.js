@@ -1,3 +1,4 @@
+import { generateToken } from "../../utils/jwtTokens.js";
 import { catchAsyncError } from "../middlewares/catchAsyncError.js";
 import ErrorHandler from "../middlewares/error.js";
 import { User } from "../models/userSchema.js";
@@ -52,9 +53,6 @@ export const register = catchAsyncError(async (req, res, next) => {
     },
   });
 
-  res.status(201).json({
-    success: true,
-    message: "User registered successfully",
-    user,
-  });
+  generateToken(user , "userRegistered!" , 201 ,res)
+  
 });
