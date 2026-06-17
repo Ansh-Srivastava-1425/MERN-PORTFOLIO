@@ -56,3 +56,33 @@ export const register = catchAsyncError(async (req, res, next) => {
   generateToken(user , "userRegistered!" , 201 ,res)
   
 });
+
+export const login = catchAsyncError(async (req, res, next) => {
+
+  console.log(req.body);
+  const { email, password } = req.body || {};
+
+  if (!email || !password) {
+    return next(
+      new ErrorHandler("Email and Password are required", 400)
+    );
+  }
+
+  const user = await User.findOne({ email }).select("+password");
+
+  if (!user) {
+    return next(
+      new ErrorHandler("Invalid Email or Password", 401)
+    );
+  }
+
+  const isPasswordMatched = await user.comparePassword(password);
+
+  if (!isPasswordMatched) {
+    return next(
+      new ErrorHandler("Invalid Email or Password", 401)
+    );
+  }
+
+  generateToken(user, "Logged In Successfully", 200, res);
+});
