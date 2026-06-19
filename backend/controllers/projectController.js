@@ -24,7 +24,7 @@ const getProjects = async (req, res) => {
   const { category } = req.query;
 
   try {
-    const filter = {};
+    const filter = { isPublished: true };
     if (category) {
       filter.category = category;
     }
@@ -116,6 +116,9 @@ const updateProject = async (req, res) => {
     if (category) project.category = category;
     if (featured !== undefined) {
       project.featured = featured === 'true' || featured === true;
+    }
+    if (req.body.isPublished !== undefined) {
+      project.isPublished = req.body.isPublished === 'true' || req.body.isPublished === true;
     }
 
     // Handle new image upload & delete old one

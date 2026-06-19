@@ -5,12 +5,6 @@ const skillSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  proficiency: {
-    type: Number,
-    required: true,
-    min: 0,
-    max: 100,
-  },
 });
 
 const profileSchema = new mongoose.Schema(
@@ -45,6 +39,21 @@ const profileSchema = new mongoose.Schema(
     },
     avatar: {
       type: String,
+    },
+    resumeUrl: {
+      type: String,
+      default: '',
+    },
+    resumePublicId: {
+      type: String,
+      default: '',
+    },
+    seo: {
+      title: { type: String, default: '' },
+      description: { type: String, default: '' },
+      keywords: { type: String, default: '' },
+      ogImage: { type: String, default: '' },
+      ogImagePublicId: { type: String, default: '' },
     },
     skills: [skillSchema],
   },

@@ -8,14 +8,29 @@ const profileRoutes = require('./routes/profileRoutes');
 const timelineRoutes = require('./routes/timelineRoutes');
 const projectRoutes = require('./routes/projectRoutes');
 const messageRoutes = require('./routes/messageRoutes');
+const postRoutes = require('./routes/postRoutes');
+const adminRoutes = require('./routes/adminRoutes');
 
 connectDB();
 
 const app = express();
 
 app.use(cors({
-  origin: process.env.CLIENT_URL || 'http://localhost:5173',
-  credentials: true
+  origin: function (origin, callback) {
+    const allowedOrigins = [
+      'http://localhost:5173',
+      'http://localhost:5174',
+      process.env.FRONTEND_URL,
+      process.env.CLIENT_URL,
+    ].filter(Boolean);
+    
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true,
 }));
 app.use(cookieParser());
 app.use(express.json());
@@ -29,6 +44,8 @@ app.use('/api/profile', profileRoutes);
 app.use('/api/timeline', timelineRoutes);
 app.use('/api/projects', projectRoutes);
 app.use('/api/messages', messageRoutes);
+app.use('/api/posts', postRoutes);
+app.use('/api/admin', adminRoutes);
 
 // Custom Error Handling Middleware
 app.use((err, req, res, next) => {

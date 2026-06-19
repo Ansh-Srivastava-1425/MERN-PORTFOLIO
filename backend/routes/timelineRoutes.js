@@ -1,4 +1,5 @@
 const express = require('express');
+const Timeline = require('../models/Timeline');
 const {
   getTimeline,
   addEntry,
@@ -16,5 +17,17 @@ router.route('/')
 router.route('/:id')
   .put(protect, updateEntry)
   .delete(protect, deleteEntry);
+
+router.patch('/:id/toggle', protect, async (req, res) => {
+  try {
+    const entry = await Timeline.findById(req.params.id);
+    if (!entry) return res.status(404).json({ message: 'Timeline entry not found.' });
+    entry.isPublished = !entry.isPublished;
+    await entry.save();
+    res.json({ isPublished: entry.isPublished });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
 
 module.exports = router;

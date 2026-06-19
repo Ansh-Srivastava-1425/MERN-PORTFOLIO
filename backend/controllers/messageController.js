@@ -1,4 +1,5 @@
 const Message = require('../models/Message');
+const { sendAdminNotification, sendVisitorAutoReply } = require('../utils/sendEmail');
 
 // @desc    Send a contact message
 // @route   POST /api/messages
@@ -17,6 +18,14 @@ const sendMessage = async (req, res) => {
       email,
       message,
     });
+
+    try {
+      await sendAdminNotification(senderName, email, message);
+      await sendVisitorAutoReply(senderName, email);
+    } catch (emailError) {
+      console.error('Email sending failed:', emailError.message);
+      // Do NOT throw — message is already saved, email is non-critical
+    }
 
     res.status(201).json(newMessage);
   } catch (error) {

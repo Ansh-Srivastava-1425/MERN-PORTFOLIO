@@ -5,7 +5,7 @@ const Timeline = require('../models/Timeline');
 // @access  Public
 const getTimeline = async (req, res) => {
   try {
-    const timeline = await Timeline.find().sort({ from: -1 });
+    const timeline = await Timeline.find({ isPublished: true }).sort({ from: -1 });
     res.status(200).json(timeline);
   } catch (error) {
     res.status(500).json({ message: error.message });

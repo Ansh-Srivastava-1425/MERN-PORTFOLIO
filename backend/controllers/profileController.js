@@ -49,12 +49,12 @@ const addSkill = async (req, res) => {
       return;
     }
 
-    if (!name || proficiency === undefined) {
-      res.status(400).json({ message: 'Please provide skill name and proficiency.' });
+    if (!name) {
+      res.status(400).json({ message: 'Please provide skill name.' });
       return;
     }
 
-    profile.skills.push({ name, proficiency });
+    profile.skills.push({ name });
     await profile.save();
     res.status(201).json(profile.skills);
   } catch (error) {
@@ -66,7 +66,7 @@ const addSkill = async (req, res) => {
 // @route   PUT /api/profile/skills/:id
 // @access  Private (Protected)
 const updateSkill = async (req, res) => {
-  const { name, proficiency } = req.body;
+  const { name } = req.body;
   const skillId = req.params.id;
 
   try {
@@ -83,7 +83,6 @@ const updateSkill = async (req, res) => {
     }
 
     if (name !== undefined) skill.name = name;
-    if (proficiency !== undefined) skill.proficiency = proficiency;
 
     await profile.save();
     res.status(200).json(profile.skills);
