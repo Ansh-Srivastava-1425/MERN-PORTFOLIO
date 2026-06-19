@@ -7,6 +7,7 @@ const authRoutes = require('./routes/authRoutes');
 const profileRoutes = require('./routes/profileRoutes');
 const timelineRoutes = require('./routes/timelineRoutes');
 const projectRoutes = require('./routes/projectRoutes');
+const messageRoutes = require('./routes/messageRoutes');
 
 connectDB();
 
@@ -27,6 +28,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/profile', profileRoutes);
 app.use('/api/timeline', timelineRoutes);
 app.use('/api/projects', projectRoutes);
+app.use('/api/messages', messageRoutes);
 
 // Custom Error Handling Middleware
 app.use((err, req, res, next) => {
