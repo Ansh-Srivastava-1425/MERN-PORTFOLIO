@@ -1,7 +1,7 @@
-import jwt from 'jsonwebtoken';
-import User from '../models/User.js';
+const jwt = require('jsonwebtoken');
+const User = require('../models/User');
 
-export const protect = async (req, res, next) => {
+const protect = async (req, res, next) => {
   let token;
 
   // Read the token cookie
@@ -33,3 +33,5 @@ export const protect = async (req, res, next) => {
     res.status(401).json({ message: 'Not authorized, token invalid or expired' });
   }
 };
+
+module.exports = { protect };

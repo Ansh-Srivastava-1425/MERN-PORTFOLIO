@@ -1,12 +1,12 @@
-import express from 'express';
-import {
+const express = require('express');
+const {
   getProfile,
   upsertProfile,
   addSkill,
   updateSkill,
   deleteSkill,
-} from '../controllers/profileController.js';
-import { protect } from '../middleware/auth.js';
+} = require('../controllers/profileController');
+const { protect } = require('../middleware/auth');
 
 const router = express.Router();
 
@@ -21,4 +21,4 @@ router.route('/skills/:id')
   .put(protect, updateSkill)
   .delete(protect, deleteSkill);
 
-export default router;
+module.exports = router;

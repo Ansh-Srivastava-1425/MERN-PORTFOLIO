@@ -1,9 +1,9 @@
-import Timeline from '../models/Timeline.js';
+const Timeline = require('../models/Timeline');
 
 // @desc    Get all timeline entries
 // @route   GET /api/timeline
 // @access  Public
-export const getTimeline = async (req, res) => {
+const getTimeline = async (req, res) => {
   try {
     const timeline = await Timeline.find().sort({ from: -1 });
     res.status(200).json(timeline);
@@ -15,7 +15,7 @@ export const getTimeline = async (req, res) => {
 // @desc    Create a timeline entry
 // @route   POST /api/timeline
 // @access  Private (Protected)
-export const addEntry = async (req, res) => {
+const addEntry = async (req, res) => {
   const { title, description, from, to, present } = req.body;
 
   try {
@@ -41,7 +41,7 @@ export const addEntry = async (req, res) => {
 // @desc    Update a timeline entry
 // @route   PUT /api/timeline/:id
 // @access  Private (Protected)
-export const updateEntry = async (req, res) => {
+const updateEntry = async (req, res) => {
   const { id } = req.params;
 
   try {
@@ -66,7 +66,7 @@ export const updateEntry = async (req, res) => {
 // @desc    Delete a timeline entry
 // @route   DELETE /api/timeline/:id
 // @access  Private (Protected)
-export const deleteEntry = async (req, res) => {
+const deleteEntry = async (req, res) => {
   const { id } = req.params;
 
   try {
@@ -82,4 +82,11 @@ export const deleteEntry = async (req, res) => {
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
+};
+
+module.exports = {
+  getTimeline,
+  addEntry,
+  updateEntry,
+  deleteEntry,
 };

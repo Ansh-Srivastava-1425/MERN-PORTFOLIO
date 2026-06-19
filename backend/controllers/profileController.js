@@ -1,12 +1,11 @@
-import Profile from '../models/Profile.js';
+const Profile = require('../models/Profile');
 
 // @desc    Get the admin profile
 // @route   GET /api/profile
 // @access  Public
-export const getProfile = async (req, res) => {
+const getProfile = async (req, res) => {
   try {
     const profile = await Profile.findOne();
-    // Return null or empty if not found, as requested
     res.status(200).json(profile);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -16,7 +15,7 @@ export const getProfile = async (req, res) => {
 // @desc    Upsert admin profile (create if none, update if exists)
 // @route   PUT /api/profile
 // @access  Private (Protected)
-export const upsertProfile = async (req, res) => {
+const upsertProfile = async (req, res) => {
   try {
     let profile = await Profile.findOne();
 
@@ -40,7 +39,7 @@ export const upsertProfile = async (req, res) => {
 // @desc    Add a skill to profile
 // @route   POST /api/profile/skills
 // @access  Private (Protected)
-export const addSkill = async (req, res) => {
+const addSkill = async (req, res) => {
   const { name, proficiency } = req.body;
 
   try {
@@ -66,7 +65,7 @@ export const addSkill = async (req, res) => {
 // @desc    Update a skill in profile
 // @route   PUT /api/profile/skills/:id
 // @access  Private (Protected)
-export const updateSkill = async (req, res) => {
+const updateSkill = async (req, res) => {
   const { name, proficiency } = req.body;
   const skillId = req.params.id;
 
@@ -96,7 +95,7 @@ export const updateSkill = async (req, res) => {
 // @desc    Delete a skill from profile
 // @route   DELETE /api/profile/skills/:id
 // @access  Private (Protected)
-export const deleteSkill = async (req, res) => {
+const deleteSkill = async (req, res) => {
   const skillId = req.params.id;
 
   try {
@@ -118,4 +117,12 @@ export const deleteSkill = async (req, res) => {
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
+};
+
+module.exports = {
+  getProfile,
+  upsertProfile,
+  addSkill,
+  updateSkill,
+  deleteSkill,
 };

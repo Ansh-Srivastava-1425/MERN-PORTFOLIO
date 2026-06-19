@@ -1,11 +1,11 @@
-import express from 'express';
-import {
+const express = require('express');
+const {
   getTimeline,
   addEntry,
   updateEntry,
   deleteEntry,
-} from '../controllers/timelineController.js';
-import { protect } from '../middleware/auth.js';
+} = require('../controllers/timelineController');
+const { protect } = require('../middleware/auth');
 
 const router = express.Router();
 
@@ -17,4 +17,4 @@ router.route('/:id')
   .put(protect, updateEntry)
   .delete(protect, deleteEntry);
 
-export default router;
+module.exports = router;

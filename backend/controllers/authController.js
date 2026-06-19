@@ -1,7 +1,10 @@
-import User from '../models/User.js';
-import generateToken from '../utils/generateToken.js';
+const User = require('../models/User');
+const generateToken = require('../utils/generateToken');
 
-export const registerAdmin = async (req, res) => {
+// @desc    Register admin user (only if none exists)
+// @route   POST /api/auth/register
+// @access  Public
+const registerAdmin = async (req, res) => {
   const { name, email, password } = req.body;
 
   try {
@@ -37,8 +40,10 @@ export const registerAdmin = async (req, res) => {
   }
 };
 
-
-export const login = async (req, res) => {
+// @desc    Auth user & get token
+// @route   POST /api/auth/login
+// @access  Public
+const login = async (req, res) => {
   const { email, password } = req.body;
 
   try {
@@ -74,8 +79,10 @@ export const login = async (req, res) => {
   }
 };
 
-
-export const logout = (req, res) => {
+// @desc    Logout user / clear cookie
+// @route   POST /api/auth/logout
+// @access  Private
+const logout = (req, res) => {
   res.cookie('token', '', {
     httpOnly: true,
     expires: new Date(0), // expire immediately
@@ -83,12 +90,21 @@ export const logout = (req, res) => {
   res.status(200).json({ message: 'Logged out successfully' });
 };
 
-
-export const getMe = (req, res) => {
+// @desc    Get user profile
+// @route   GET /api/auth/me
+// @access  Private
+const getMe = (req, res) => {
   // req.user has already been set by the protect middleware
   res.status(200).json({
     _id: req.user._id,
     name: req.user.name,
     email: req.user.email,
   });
+};
+
+module.exports = {
+  registerAdmin,
+  login,
+  logout,
+  getMe,
 };
