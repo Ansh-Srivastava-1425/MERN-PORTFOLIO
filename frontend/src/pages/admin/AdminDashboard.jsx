@@ -60,6 +60,7 @@ const AdminDashboard = () => {
   const [crop, setCrop] = useState();
   const [completedCrop, setCompletedCrop] = useState(null);
   const [showCropper, setShowCropper] = useState(false);
+  const [zoom, setZoom] = useState(1);
   const imgRef = useRef(null);
   const canvasRef = useRef(null);
 
@@ -165,6 +166,7 @@ const AdminDashboard = () => {
       reader.addEventListener('load', () => {
         setImgSrc(reader.result?.toString() || '');
         setShowCropper(true);
+        setZoom(1);
       });
       reader.readAsDataURL(e.target.files[0]);
     }
@@ -851,7 +853,39 @@ const AdminDashboard = () => {
                           <h3 className="text-white font-semibold text-lg mb-4">Crop Avatar</h3>
                           <p className="text-slate-400 text-sm mb-4">Drag to reposition. The crop is fixed to a 1:1 square ratio.</p>
                           
-                          <div className="flex justify-center mb-4">
+                          <div className="mb-4 space-y-2">
+                            <div className="flex items-center justify-between text-xs text-slate-400 font-mono">
+                              <span>ZOOM</span>
+                              <span>{Math.round(zoom * 100)}%</span>
+                            </div>
+                            <div className="flex items-center gap-3">
+                              <button
+                                type="button"
+                                onClick={() => setZoom(z => Math.max(0.5, z - 0.1))}
+                                className="w-8 h-8 rounded-full bg-white/5 border border-white/10 text-white hover:bg-white/10 transition-colors flex items-center justify-center text-lg font-bold"
+                              >
+                                −
+                              </button>
+                              <input
+                                type="range"
+                                min={0.5}
+                                max={3}
+                                step={0.05}
+                                value={zoom}
+                                onChange={(e) => setZoom(parseFloat(e.target.value))}
+                                className="flex-1 accent-indigo-500 cursor-pointer"
+                              />
+                              <button
+                                type="button"
+                                onClick={() => setZoom(z => Math.min(3, z + 0.1))}
+                                className="w-8 h-8 rounded-full bg-white/5 border border-white/10 text-white hover:bg-white/10 transition-colors flex items-center justify-center text-lg font-bold"
+                              >
+                                +
+                              </button>
+                            </div>
+                          </div>
+
+                          <div className="flex justify-center mb-4 overflow-hidden rounded-xl">
                             <ReactCrop
                               crop={crop}
                               onChange={(c) => setCrop(c)}
@@ -859,13 +893,15 @@ const AdminDashboard = () => {
                               aspect={1}
                               circularCrop
                             >
-                              <img
-                                ref={imgRef}
-                                src={imgSrc}
-                                alt="Crop preview"
-                                onLoad={onImageLoad}
-                                className="max-h-60 max-w-full rounded-lg"
-                              />
+                              <div style={{ transform: `scale(${zoom})`, transformOrigin: 'center', transition: 'transform 0.1s ease' }}>
+                                <img
+                                  ref={imgRef}
+                                  src={imgSrc}
+                                  alt="Crop preview"
+                                  onLoad={onImageLoad}
+                                  className="max-h-60 max-w-full rounded-lg"
+                                />
+                              </div>
                             </ReactCrop>
                           </div>
 
