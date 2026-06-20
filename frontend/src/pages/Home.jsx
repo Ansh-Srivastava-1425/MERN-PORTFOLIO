@@ -19,6 +19,7 @@ const Home = () => {
   const { theme, toggleTheme } = useTheme();
 
   const [activeCategory, setActiveCategory] = useState('all');
+  const [menuOpen, setMenuOpen] = useState(false);
   const [formData, setFormData] = useState({
     senderName: '',
     email: '',
@@ -122,7 +123,7 @@ const Home = () => {
       <div className="absolute bottom-[-10%] left-[20%] w-[500px] h-[500px] rounded-full bg-purple-900/10 blur-[150px] pointer-events-none"></div>
 
       {/* Navigation */}
-      <nav className="sticky top-0 z-50 transition-all duration-300 backdrop-blur-md"
+      <nav className="sticky top-0 z-50 transition-all duration-300 backdrop-blur-md relative"
         style={{
           backgroundColor: theme === 'dark' ? 'rgba(10,10,15,0.75)' : 'rgba(248,250,252,0.85)',
           borderBottom: '1px solid var(--border)',
@@ -160,19 +161,41 @@ const Home = () => {
             >
               ADMIN PANEL
             </Link>
+            <button
+              onClick={() => setMenuOpen(!menuOpen)}
+              className="md:hidden text-slate-300 hover:text-white text-xl leading-none"
+              aria-label="Toggle menu"
+            >
+              {menuOpen ? '✕' : '☰'}
+            </button>
           </div>
         </div>
+        {menuOpen && (
+          <div className="md:hidden absolute top-full left-0 right-0 border-b py-4 px-6 flex flex-col gap-4"
+            style={{ backgroundColor: theme === 'dark' ? 'rgba(10,10,15,0.97)' : 'rgba(248,250,252,0.97)', borderColor: 'var(--border)' }}>
+            {['About', 'Experience', 'Projects', 'Blog', 'Contact'].map(item => (
+              <a
+                key={item}
+                href={`#${item.toLowerCase()}`}
+                onClick={() => setMenuOpen(false)}
+                className="text-slate-400 hover:text-white transition-colors text-sm font-medium"
+              >
+                {item}
+              </a>
+            ))}
+          </div>
+        )}
       </nav>
 
       <main className="flex-1">
         {/* Hero Section */}
-        <section className="max-w-6xl mx-auto px-6 pt-16 pb-20 flex flex-col md:flex-row items-center gap-12 relative z-10">
-          <div className="flex-1 min-w-0 space-y-6 text-center md:text-left">
+        <section className="max-w-6xl mx-auto px-6 pt-10 pb-16 flex flex-col md:flex-row items-center gap-8 relative z-10">
+          <div className="flex-1 min-w-0 space-y-4 text-center md:text-left order-2 md:order-1">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-indigo-500/20 bg-indigo-500/5 text-xs text-indigo-400 font-mono">
               <span className="w-2 h-2 rounded-full bg-indigo-500 animate-pulse"></span>
               AVAILABLE FOR WORK
             </div>
-            <h1 className="text-5xl lg:text-6xl font-bold leading-tight" style={{ color: 'var(--text-primary)' }}>
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight" style={{ color: 'var(--text-primary)' }}>
               Hi, I'm{' '}
               <span className="bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
                 {profile?.fullName || 'Portfolio Owner'}
@@ -184,16 +207,16 @@ const Home = () => {
             <p className="max-w-xl mx-auto md:mx-0 font-light leading-relaxed" style={{ color: 'var(--text-muted)' }}>
               {profile?.aboutMe || 'Welcome to my portfolio! I build premium web applications and intelligent hardware systems. Explore my experience, projects, and get in touch.'}
             </p>
-            <div className="flex flex-wrap items-center justify-center md:justify-start gap-4 pt-4">
+            <div className="flex flex-col sm:flex-row items-center justify-center md:justify-start gap-3 pt-4">
               <a 
                 href="#contact" 
-                className="px-6 py-3 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-medium text-sm transition-all duration-200 shadow-lg shadow-indigo-900/30"
+                className="w-full sm:w-auto px-6 py-3 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-medium text-sm transition-all duration-200 shadow-lg shadow-indigo-900/30 text-center"
               >
                 Get In Touch
               </a>
               <a 
                 href="#projects" 
-                className="px-6 py-3 rounded-xl font-medium text-sm transition-all duration-200"
+                className="w-full sm:w-auto px-6 py-3 rounded-xl font-medium text-sm transition-all duration-200 text-center"
                 style={{ border: '1px solid var(--border)', backgroundColor: 'var(--bg-card)', color: 'var(--text-secondary)' }}
               >
                 View My Work
@@ -204,7 +227,7 @@ const Home = () => {
                   target="_blank"
                   rel="noopener noreferrer"
                   download
-                  className="inline-flex items-center gap-2 px-6 py-3 rounded-full text-sm font-medium transition-all duration-200 hover:text-indigo-400"
+                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full text-sm font-medium transition-all duration-200 hover:text-indigo-400"
                   style={{ border: '1px solid var(--border)', color: 'var(--text-secondary)' }}
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4"
@@ -219,7 +242,7 @@ const Home = () => {
           </div>
 
           {/* Profile Image Card */}
-          <div className="flex-1 flex justify-center md:justify-end">
+          <div className="flex justify-center md:justify-end order-1 md:order-2">
             <div className="relative group">
               <div className="absolute -inset-1 rounded-full bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 opacity-20 blur-lg group-hover:opacity-40 transition duration-1000 group-hover:duration-200"></div>
               <div className="flex items-center justify-center relative">
@@ -227,10 +250,10 @@ const Home = () => {
                   <img 
                     src={profile.avatar} 
                     alt={profile.fullName} 
-                    className="w-72 h-72 rounded-full object-cover object-top border-2 border-indigo-500/30 shadow-[0_0_40px_rgba(99,102,241,0.15)]"
+                    className="w-36 h-36 md:w-72 md:h-72 rounded-full object-cover object-top border-2 border-indigo-500/30 shadow-[0_0_40px_rgba(99,102,241,0.15)]"
                   />
                 ) : (
-                  <div className="w-72 h-72 rounded-full border-2 flex flex-col items-center justify-center"
+                  <div className="w-48 h-48 md:w-72 md:h-72 rounded-full border-2 flex flex-col items-center justify-center"
                     style={{ borderColor: 'var(--border)', backgroundColor: 'var(--bg-secondary)', color: 'var(--text-muted)' }}>
                     <svg className="w-20 h-20 mb-2 stroke-current" fill="none" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />

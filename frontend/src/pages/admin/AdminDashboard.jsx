@@ -657,16 +657,16 @@ const AdminDashboard = () => {
 
       {/* Nav */}
       <header className="border-b border-slate-900 bg-[#0a0a0f]/80 backdrop-blur-md sticky top-0 z-50">
-        <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+        <div className="max-w-6xl mx-auto px-6 py-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
           <div className="flex items-center space-x-3">
             <span className="text-xl font-bold bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent font-display">
               ADMIN DASHBOARD
             </span>
-            <span className="text-[10px] font-mono text-slate-500 bg-slate-900 px-2 py-0.5 rounded border border-slate-800">
+            <span className="hidden sm:block text-[10px] font-mono text-slate-500 bg-slate-900 px-2 py-0.5 rounded border border-slate-800">
               Welcome, {user?.name || 'Admin'}
             </span>
           </div>
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center gap-3">
             <a 
               href="/" 
               target="_blank" 
@@ -715,7 +715,7 @@ const AdminDashboard = () => {
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
-              className={`px-6 py-3 border-b-2 font-medium capitalize transition-all ${
+              className={`px-4 py-3 border-b-2 font-medium capitalize transition-all whitespace-nowrap min-w-fit ${
                 activeTab === tab 
                   ? 'border-indigo-500 text-white bg-indigo-500/5' 
                   : 'border-transparent text-slate-400 hover:text-slate-200'
