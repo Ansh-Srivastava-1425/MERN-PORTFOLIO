@@ -31,12 +31,19 @@ router.post('/avatar', protect, upload.single('image'), async (req, res) => {
         public_id: `avatar-${Date.now()}`
       },
       async (error, result) => {
-        if (error) return res.status(500).json({ message: error.message });
+        if (error) {
+          console.log('Cloudinary error:', error.message);
+          return res.status(500).json({ message: error.message });
+        }
+        console.log('Cloudinary upload success:', result.secure_url);
+        console.log('Profile before save:', JSON.stringify(profile));
 
         try {
           if (profile) {
             profile.avatar = result.secure_url;
+            console.log('Profile after assignment:', profile.avatar);
             await profile.save();
+            console.log('Profile saved successfully');
           }
           res.json({ url: result.secure_url });
         } catch (saveErr) {

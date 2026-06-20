@@ -16,6 +16,7 @@ const getProfile = async (req, res) => {
 // @route   PUT /api/profile
 // @access  Private (Protected)
 const upsertProfile = async (req, res) => {
+  console.log('upsertProfile called with body:', JSON.stringify(req.body));
   try {
     let profile = await Profile.findOne();
 
@@ -25,10 +26,12 @@ const upsertProfile = async (req, res) => {
         new: true,
         runValidators: true,
       });
+      console.log('Profile saved:', JSON.stringify(profile));
       res.status(200).json(profile);
     } else {
       // Create new
       profile = await Profile.create(req.body);
+      console.log('Profile saved:', JSON.stringify(profile));
       res.status(201).json(profile);
     }
   } catch (error) {

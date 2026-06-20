@@ -12,7 +12,9 @@ export const fetchProfile = createAsyncThunk('profile/fetchProfile', async (_, {
 
 export const updateProfile = createAsyncThunk('profile/updateProfile', async (profileData, { rejectWithValue }) => {
   try {
+    console.log('updateProfile called with:', profileData);
     const response = await API.put('/profile', profileData);
+    console.log('updateProfile response:', response.data);
     return response.data;
   } catch (error) {
     return rejectWithValue(error.response?.data?.message || 'Failed to update profile');
