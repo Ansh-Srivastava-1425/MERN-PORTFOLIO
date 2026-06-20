@@ -710,7 +710,7 @@ const AdminDashboard = () => {
         )}
 
         {/* Tab Selection */}
-        <div className="flex border-b border-slate-900 mb-8 font-mono text-sm overflow-x-auto whitespace-nowrap scrollbar-none relative">
+        <div className="flex mb-8 font-mono text-sm overflow-x-auto whitespace-nowrap scrollbar-none relative border-b border-slate-800">
           {['profile', 'projects', 'timeline', 'messages', 'blog'].map((tab) => (
             <button
               key={tab}
