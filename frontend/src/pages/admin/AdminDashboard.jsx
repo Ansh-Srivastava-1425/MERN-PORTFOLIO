@@ -710,12 +710,12 @@ const AdminDashboard = () => {
         )}
 
         {/* Tab Selection */}
-        <div className="flex border-b border-slate-900 mb-8 font-mono text-sm overflow-x-auto whitespace-nowrap scrollbar-none">
+        <div className="flex border-b border-slate-900 mb-8 font-mono text-sm overflow-x-auto whitespace-nowrap scrollbar-none relative">
           {['profile', 'projects', 'timeline', 'messages', 'blog'].map((tab) => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
-              className={`px-4 py-3 border-b-2 font-medium capitalize transition-all whitespace-nowrap min-w-fit ${
+              className={`px-6 py-3 border-b-2 font-medium capitalize transition-all flex-shrink-0 ${
                 activeTab === tab 
                   ? 'border-indigo-500 text-white bg-indigo-500/5' 
                   : 'border-transparent text-slate-400 hover:text-slate-200'
