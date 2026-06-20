@@ -55,6 +55,7 @@ const AdminDashboard = () => {
   });
 
   const [avatarFile, setAvatarFile] = useState(null);
+  const avatarFileRef = useRef(null);
   const [imgSrc, setImgSrc] = useState('');
   const [crop, setCrop] = useState();
   const [completedCrop, setCompletedCrop] = useState(null);
@@ -206,6 +207,7 @@ const AdminDashboard = () => {
       if (!blob) return;
       const croppedFile = new File([blob], 'avatar.jpg', { type: 'image/jpeg' });
       setAvatarFile(croppedFile);
+      avatarFileRef.current = croppedFile;
       setShowCropper(false);
       // Show preview
       const previewUrl = URL.createObjectURL(blob);
@@ -389,11 +391,12 @@ const AdminDashboard = () => {
     try {
       let avatarUrl = profileForm.avatar;
 
-      if (avatarFile) {
+      if (avatarFileRef.current) {
         const formData = new FormData();
-        formData.append('image', avatarFile);
+        formData.append('image', avatarFileRef.current);
         const res = await API.post('/profile/avatar', formData);
         avatarUrl = res.data.url;
+        avatarFileRef.current = null;
       }
 
       const profileData = {
