@@ -394,11 +394,23 @@ const AdminDashboard = () => {
         formData.append('image', avatarFile);
         const res = await API.post('/profile/avatar', formData);
         avatarUrl = res.data.url;
+        setProfileForm(prev => ({ 
+          ...prev, 
+          avatar: avatarUrl,
+          avatarPreview: null 
+        }));
       }
 
-      await dispatch(updateProfile({ ...profileForm, avatar: avatarUrl })).unwrap();
+      await dispatch(updateProfile({ 
+        ...profileForm, 
+        avatar: avatarUrl 
+      })).unwrap();
+      
+      await dispatch(fetchProfile());
+      
       toast.success('Profile updated successfully!');
       setAvatarFile(null);
+      setImgSrc('');
     } catch (err) {
       toast.error(err || 'Failed to update profile');
     }
