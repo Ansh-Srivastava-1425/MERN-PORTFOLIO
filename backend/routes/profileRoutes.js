@@ -22,11 +22,26 @@ router.post('/avatar', protect, upload.single('image'), async (req, res) => {
     if (!req.file) {
       return res.status(400).json({ message: 'No file uploaded' });
     }
+
+    let profile = await Profile.findOne();
+
     const stream = cloudinary.uploader.upload_stream(
-      { folder: 'portfolio/avatar' },
-      (error, result) => {
+      { 
+        folder: 'portfolio/avatar',
+        public_id: `avatar-${Date.now()}`
+      },
+      async (error, result) => {
         if (error) return res.status(500).json({ message: error.message });
-        res.json({ url: result.secure_url });
+
+        try {
+          if (profile) {
+            profile.avatar = result.secure_url;
+            await profile.save();
+          }
+          res.json({ url: result.secure_url });
+        } catch (saveErr) {
+          res.status(500).json({ message: saveErr.message });
+        }
       }
     );
     stream.end(req.file.buffer);
