@@ -394,20 +394,23 @@ const AdminDashboard = () => {
         formData.append('image', avatarFile);
         const res = await API.post('/profile/avatar', formData);
         avatarUrl = res.data.url;
-        setProfileForm(prev => ({ 
-          ...prev, 
-          avatar: avatarUrl,
-          avatarPreview: null 
-        }));
       }
 
-      await dispatch(updateProfile({ 
-        ...profileForm, 
-        avatar: avatarUrl 
-      })).unwrap();
-      
+      const profileData = {
+        ...profileForm,
+        avatar: avatarUrl,
+      };
+      delete profileData.avatarPreview;
+
+      await dispatch(updateProfile(profileData)).unwrap();
       await dispatch(fetchProfile());
-      
+
+      setProfileForm(prev => ({
+        ...prev,
+        avatar: avatarUrl,
+        avatarPreview: null,
+      }));
+
       toast.success('Profile updated successfully!');
       setAvatarFile(null);
       setImgSrc('');
