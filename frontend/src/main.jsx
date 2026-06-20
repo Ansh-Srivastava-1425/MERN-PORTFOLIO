@@ -7,6 +7,17 @@ import store from './redux/store';
 import './index.css';
 import App from './App.jsx';
 
+// Keep Render backend alive
+const keepAlive = () => {
+  fetch('https://mern-portfolio-bl8d.onrender.com/api/health')
+    .then(() => console.log('Backend pinged'))
+    .catch(() => {});
+};
+
+// Ping immediately and then every 10 minutes
+keepAlive();
+setInterval(keepAlive, 10 * 60 * 1000);
+
 createRoot(document.getElementById('root')).render(
     <Provider store={store}>
       <BrowserRouter>
