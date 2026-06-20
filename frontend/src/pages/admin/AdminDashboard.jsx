@@ -411,7 +411,11 @@ const AdminDashboard = () => {
   const handleProfileSubmit = async (e) => {
     e.preventDefault();
     try {
-      await dispatch(updateProfile(profileForm)).unwrap();
+      const profileData = { ...profileForm };
+      delete profileData.avatarPreview;
+      if (!profileData.avatar) delete profileData.avatar;
+
+      await dispatch(updateProfile(profileData)).unwrap();
       await dispatch(fetchProfile());
       toast.success('Profile updated successfully!');
     } catch (err) {
@@ -843,7 +847,7 @@ const AdminDashboard = () => {
                     {/* Cropper Modal */}
                     {showCropper && imgSrc && (
                       <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm">
-                        <div className="bg-[#111118] border border-white/10 rounded-2xl p-6 max-w-lg w-full mx-4">
+                        <div className="bg-[#111118] border border-white/10 rounded-2xl p-6 max-w-lg w-full mx-4 max-h-[90vh] overflow-y-auto">
                           <h3 className="text-white font-semibold text-lg mb-4">Crop Avatar</h3>
                           <p className="text-slate-400 text-sm mb-4">Drag to reposition. The crop is fixed to a 1:1 square ratio.</p>
                           
@@ -860,7 +864,7 @@ const AdminDashboard = () => {
                                 src={imgSrc}
                                 alt="Crop preview"
                                 onLoad={onImageLoad}
-                                className="max-h-80 max-w-full rounded-lg"
+                                className="max-h-60 max-w-full rounded-lg"
                               />
                             </ReactCrop>
                           </div>

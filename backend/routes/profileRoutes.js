@@ -23,8 +23,6 @@ router.post('/avatar', protect, upload.single('image'), async (req, res) => {
       return res.status(400).json({ message: 'No file uploaded' });
     }
 
-    let profile = await Profile.findOne();
-
     const stream = cloudinary.uploader.upload_stream(
       { 
         folder: 'portfolio/avatar',
@@ -36,17 +34,17 @@ router.post('/avatar', protect, upload.single('image'), async (req, res) => {
           return res.status(500).json({ message: error.message });
         }
         console.log('Cloudinary upload success:', result.secure_url);
-        console.log('Profile before save:', JSON.stringify(profile));
 
         try {
-          if (profile) {
-            profile.avatar = result.secure_url;
-            console.log('Profile after assignment:', profile.avatar);
-            await profile.save();
-            console.log('Profile saved successfully');
-          }
+          const updated = await Profile.findOneAndUpdate(
+            {},
+            { $set: { avatar: result.secure_url } },
+            { new: true, upsert: true }
+          );
+          console.log('Profile avatar saved to DB:', updated?.avatar);
           res.json({ url: result.secure_url });
         } catch (saveErr) {
+          console.log('DB save error:', saveErr.message);
           res.status(500).json({ message: saveErr.message });
         }
       }
