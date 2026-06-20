@@ -386,37 +386,34 @@ const AdminDashboard = () => {
   };
 
   // --- Profile Handlers ---
+  const handleAvatarUpload = async () => {
+    if (!avatarFileRef.current && !avatarFile) return;
+    const file = avatarFileRef.current || avatarFile;
+    try {
+      const formData = new FormData();
+      formData.append('image', file);
+      const res = await API.post('/profile/avatar', formData);
+      const avatarUrl = res.data.url;
+      setProfileForm(prev => ({ 
+        ...prev, 
+        avatar: avatarUrl,
+        avatarPreview: null 
+      }));
+      setAvatarFile(null);
+      avatarFileRef.current = null;
+      toast.success('Avatar uploaded!');
+      dispatch(fetchProfile());
+    } catch (err) {
+      toast.error('Avatar upload failed');
+    }
+  };
+
   const handleProfileSubmit = async (e) => {
     e.preventDefault();
     try {
-      let avatarUrl = profileForm.avatar;
-
-      if (avatarFileRef.current) {
-        const formData = new FormData();
-        formData.append('image', avatarFileRef.current);
-        const res = await API.post('/profile/avatar', formData);
-        avatarUrl = res.data.url;
-        avatarFileRef.current = null;
-      }
-
-      const profileData = {
-        ...profileForm,
-        avatar: avatarUrl,
-      };
-      delete profileData.avatarPreview;
-
-      await dispatch(updateProfile(profileData)).unwrap();
+      await dispatch(updateProfile(profileForm)).unwrap();
       await dispatch(fetchProfile());
-
-      setProfileForm(prev => ({
-        ...prev,
-        avatar: avatarUrl,
-        avatarPreview: null,
-      }));
-
       toast.success('Profile updated successfully!');
-      setAvatarFile(null);
-      setImgSrc('');
     } catch (err) {
       toast.error(err || 'Failed to update profile');
     }
@@ -889,6 +886,16 @@ const AdminDashboard = () => {
                       </div>
                     )}
                   </div>
+
+                  {(avatarFile || avatarFileRef.current) && (
+                    <button
+                      type="button"
+                      onClick={handleAvatarUpload}
+                      className="mt-2 px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-medium transition-colors"
+                    >
+                      Upload Avatar
+                    </button>
+                  )}
 
                   <div className="border-t border-slate-900 pt-6 mt-6">
                     <label className="block text-xs text-slate-400 uppercase tracking-wider mb-2 font-mono">
