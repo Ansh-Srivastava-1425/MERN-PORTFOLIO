@@ -21,8 +21,14 @@ const upsertProfile = async (req, res) => {
     let profile = await Profile.findOne();
 
     if (profile) {
-      // Update existing
-      profile = await Profile.findOneAndUpdate({}, req.body, {
+      // Don't overwrite avatar, resumeUrl, resumePublicId 
+      // with empty values
+      const updateData = { ...req.body };
+      if (!updateData.avatar) delete updateData.avatar;
+      if (!updateData.resumeUrl) delete updateData.resumeUrl;
+      if (!updateData.resumePublicId) delete updateData.resumePublicId;
+
+      profile = await Profile.findOneAndUpdate({}, updateData, {
         new: true,
         runValidators: true,
       });
