@@ -19,6 +19,7 @@ const Home = () => {
   const { theme, toggleTheme } = useTheme();
 
   const [activeCategory, setActiveCategory] = useState('all');
+  const [showAllProjects, setShowAllProjects] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [formData, setFormData] = useState({
     senderName: '',
@@ -109,6 +110,8 @@ const Home = () => {
   const filteredProjects = activeCategory === 'all'
     ? projects
     : projects.filter(p => p.category === activeCategory);
+
+  const visibleProjects = showAllProjects ? filteredProjects : filteredProjects.slice(0, 6);
 
   // Sort timeline entries by from date (newest first)
   const sortedTimeline = [...timeline].sort((a, b) => new Date(b.from) - new Date(a.from));
@@ -396,21 +399,21 @@ const Home = () => {
           <div className="flex items-center rounded-xl p-1 font-mono text-xs self-start md:self-auto"
             style={{ backgroundColor: 'var(--bg-secondary)', border: '1px solid var(--border)' }}>
             <button 
-              onClick={() => setActiveCategory('all')} 
+              onClick={() => { setActiveCategory('all'); setShowAllProjects(false); }} 
               className={`px-4 py-2 rounded-lg transition-all ${activeCategory === 'all' ? 'bg-indigo-600 text-white shadow-md' : 'hover:text-indigo-400'}`}
               style={{ color: activeCategory === 'all' ? 'white' : 'var(--text-muted)' }}
             >
               ALL
             </button>
             <button 
-              onClick={() => setActiveCategory('webdev')} 
+              onClick={() => { setActiveCategory('webdev'); setShowAllProjects(false); }} 
               className={`px-4 py-2 rounded-lg transition-all ${activeCategory === 'webdev' ? 'bg-indigo-600 text-white shadow-md' : 'hover:text-indigo-400'}`}
               style={{ color: activeCategory === 'webdev' ? 'white' : 'var(--text-muted)' }}
             >
               WEB DEV
             </button>
             <button 
-              onClick={() => setActiveCategory('robotics')} 
+              onClick={() => { setActiveCategory('robotics'); setShowAllProjects(false); }} 
               className={`px-4 py-2 rounded-lg transition-all ${activeCategory === 'robotics' ? 'bg-indigo-600 text-white shadow-md' : 'hover:text-indigo-400'}`}
               style={{ color: activeCategory === 'robotics' ? 'white' : 'var(--text-muted)' }}
             >
@@ -420,8 +423,9 @@ const Home = () => {
         </div>
 
         {filteredProjects.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {filteredProjects.map((project) => (
+          <>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {visibleProjects.map((project) => (
               <div key={project._id} className="group rounded-2xl overflow-hidden transition-all duration-300 flex flex-col justify-between hover:translate-y-[-4px]"
                 style={{ backgroundColor: 'var(--bg-card)', border: '1px solid var(--border)' }}>
                 <div>
@@ -506,7 +510,18 @@ const Home = () => {
                 </div>
               </div>
             ))}
-          </div>
+            </div>
+            {filteredProjects.length > 6 && (
+              <div className="flex justify-center mt-10">
+                <button
+                  onClick={() => setShowAllProjects(!showAllProjects)}
+                  className="px-8 py-3 rounded-xl font-mono text-xs tracking-wider border border-indigo-500/30 text-indigo-400 bg-indigo-500/5 hover:bg-indigo-500/10 hover:border-indigo-500/60 transition-all duration-200"
+                >
+                  {showAllProjects ? '↑ SHOW LESS' : `LOAD MORE (${filteredProjects.length - 6} more)`}
+                </button>
+              </div>
+            )}
+          </>
         ) : (
           <div className="text-center py-16 border border-dashed rounded-2xl" style={{ borderColor: 'var(--border)', color: 'var(--text-muted)' }}>
             <p className="font-mono text-sm">NO PROJECTS ADDED YET</p>
