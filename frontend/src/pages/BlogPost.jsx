@@ -97,6 +97,9 @@ export default function BlogPost() {
         </div>
 
       </div>
+      <footer className="py-8 text-center text-xs text-slate-600 border-t border-white/5 bg-[#0a0a0f]">
+        <Link to="/" className="hover:text-indigo-400 transition-colors">← Back to Portfolio</Link>
+      </footer>
     </div>
   );
 }
