@@ -56,13 +56,13 @@ const AdminLogin = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#0a0a0f] text-slate-100 flex items-center justify-center relative overflow-hidden font-sans">
+    <div className="min-h-screen bg-[#0a0a0f] text-slate-100 flex flex-col items-center justify-center relative overflow-hidden font-sans">
       
       {/* Background Glows */}
       <div className="absolute top-[30%] left-[30%] w-[500px] h-[500px] rounded-full bg-indigo-900/10 blur-[130px] pointer-events-none"></div>
       <div className="absolute bottom-[20%] right-[10%] w-[400px] h-[400px] rounded-full bg-purple-900/10 blur-[130px] pointer-events-none"></div>
 
-      <div className="w-full max-w-md px-6 relative z-10">
+      <div className="flex-1 w-full max-w-md px-6 relative z-10 flex flex-col justify-center">
         
         {/* Logo/Header */}
         <div className="text-center mb-8 space-y-2">

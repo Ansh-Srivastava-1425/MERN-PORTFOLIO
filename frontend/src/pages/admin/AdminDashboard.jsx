@@ -649,7 +649,7 @@ const AdminDashboard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#0a0a0f] text-slate-100 font-sans pb-20 relative overflow-hidden">
+    <div className="min-h-screen flex flex-col bg-[#0a0a0f] text-slate-100 font-sans pb-20 relative overflow-hidden">
       
       {/* Background Glows */}
       <div className="absolute top-[20%] left-[-10%] w-[500px] h-[500px] rounded-full bg-indigo-900/5 blur-[120px] pointer-events-none"></div>
@@ -685,7 +685,7 @@ const AdminDashboard = () => {
         </div>
       </header>
 
-      <main className="max-w-6xl mx-auto px-6 mt-8 relative z-10">
+      <main className="flex-1 max-w-6xl mx-auto w-full px-6 mt-8 relative z-10">
         
         {/* Stats Overview Widget */}
         {stats && (

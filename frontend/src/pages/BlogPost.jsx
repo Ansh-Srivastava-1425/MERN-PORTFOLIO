@@ -30,8 +30,8 @@ export default function BlogPost() {
   );
 
   return (
-    <div className="min-h-screen bg-[#0a0a0f] text-slate-200">
-      <div className="max-w-3xl mx-auto px-6 py-20">
+    <div className="min-h-screen flex flex-col bg-[#0a0a0f] text-slate-200">
+      <div className="flex-1 max-w-3xl mx-auto px-6 py-20 w-full">
         
         {/* Back */}
         <Link to="/#blog"
