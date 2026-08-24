@@ -19,19 +19,32 @@ app.set('trust proxy', 1);
 
 app.use(cors({
   origin: function (origin, callback) {
+    const requestOrigin = origin ? origin.replace(/\/$/, '') : origin;
+    
+    // 1. Allow if no origin (Postman, curl, server-to-server)
+    if (!requestOrigin) {
+      return callback(null, true);
+    }
+
+    // 2. Exact matches from environment variables or localhost
     const allowedOrigins = [
       'http://localhost:5173',
       'http://localhost:5174',
       process.env.FRONTEND_URL?.replace(/\/$/, ''),
       process.env.CLIENT_URL?.replace(/\/$/, ''),
     ].filter(Boolean);
-    
-    const requestOrigin = origin ? origin.replace(/\/$/, '') : origin;
-    if (!requestOrigin || allowedOrigins.includes(requestOrigin)) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
+
+    if (allowedOrigins.includes(requestOrigin)) {
+      return callback(null, true);
     }
+
+    // 3. Regex match for Vercel preview/branch URLs
+    const vercelRegex = /^https:\/\/mern-portfolio-vlc6(-.*)?\.vercel\.app$/;
+    if (vercelRegex.test(requestOrigin)) {
+      return callback(null, true);
+    }
+
+    callback(new Error('Not allowed by CORS'));
   },
   credentials: true,
 }));
