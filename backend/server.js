@@ -1,4 +1,5 @@
 require('dotenv').config();
+require('dns').setServers(['8.8.8.8', '8.8.4.4']); // Fix Node DNS resolution for MongoDB SRV
 const express = require('express');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
